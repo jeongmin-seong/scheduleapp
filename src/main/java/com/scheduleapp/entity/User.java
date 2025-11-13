@@ -21,15 +21,20 @@ public class User extends BaseEntity{
     @Column(nullable = false, length = 50)
     private String username;
 
-    // 이메일(unique)
+    // 이메일 (unique)
     @Column(nullable = false, unique = true, length = 100)
     private String email;
 
+    // 비밀번호 (암호화되어 저장)
+    @Column(nullable = false)
+    private String password;
+
     // 생성자
     @Builder
-    public User(String username, String email) {
+    public User(String username, String email, String password) {
         this.username = username;
         this.email = email;
+        this.password = password;
     }
 
     // 유저 정보 수정 메서드
@@ -41,5 +46,9 @@ public class User extends BaseEntity{
             this.email = email;
         }
     }
+
+    // 비밀번호 변경 메서드
+    public void changePassword(String newPassword) {
+        this.password = newPassword;    }
 
 }

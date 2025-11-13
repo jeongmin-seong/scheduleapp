@@ -13,5 +13,5 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
     List<Schedule> findAllByOrderByUpdatedAtDesc();
 
     //특정 사용자의 일정을 수정일 기준 내림차순으로 조회
-    List<Schedule> findByUserIdOrderByUpdatedAtDesc(Long userId);
+    List<Schedule> findByUser_IdOrderByUpdatedAtDesc(Long userId);
 }

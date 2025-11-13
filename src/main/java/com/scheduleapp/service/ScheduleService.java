@@ -49,7 +49,7 @@ public class ScheduleService {
         // 유저 존재 확인
         userService.findUserById(userId);
 
-        List<Schedule> schedules = scheduleRepository.findByUserIdOrderByUpdatedAtDesc(userId);
+        List<Schedule> schedules = scheduleRepository.findByUser_IdOrderByUpdatedAtDesc(userId);
 
         return schedules.stream()
                 .map(ScheduleResponse::from)

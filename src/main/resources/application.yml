@@ -1,0 +1,32 @@
+spring:
+  application:
+    name: schedule-management
+
+  # MySQL Database 설정
+  datasource:
+    url: jdbc:mysql://localhost:3306/schedule_db?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: 12345678
+
+  # JPA 설정
+  jpa:
+    hibernate:
+      ddl-auto: update  # create: 테이블 재생성, update: 변경사항만 반영, none: 아무것도 안함
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: true
+        dialect: org.hibernate.dialect.MySQLDialect
+    open-in-view: false
+
+
+  session:
+    timeout: 1800
+
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+    org.hibernate.type.descriptor.sql.BasicBinder: trace
+    org.hibernate.orm.jdbc.bind: trace  # 파라미터 값 로깅

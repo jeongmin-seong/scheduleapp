@@ -22,6 +22,6 @@ public abstract class BaseEntity {
 
     // 수정일 - Entity 수정시 자동으로 현재 시간 저장
     @LastModifiedDate
-    private LocalDateTime updatedDate;
+    private LocalDateTime updatedAt;
 
 }

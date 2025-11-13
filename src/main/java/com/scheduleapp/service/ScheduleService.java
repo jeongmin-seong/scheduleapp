@@ -105,4 +105,14 @@ public class ScheduleService {
                 });
     }
 
+    // 단일 일정 조회 유지를 위한 메서드
+    public ScheduleResponse getSchedule(Long id) {
+        log.info("Fetching schedule with id: {}", id);
+
+        Schedule schedule = findScheduleById(id);
+
+        // 연관된 유저 데이터도 같이 담고 싶다면, DTO에서 처리
+        return ScheduleResponse.from(schedule);
+    }
+
 }

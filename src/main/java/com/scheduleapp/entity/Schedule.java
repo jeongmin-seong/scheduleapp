@@ -17,9 +17,10 @@ public class Schedule extends  BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // 작성자명
-    @Column(nullable = false, length = 50)
-    private String name;
+    // 작성자명(연관관계)
+    @ManyToOne(fetch = FetchType.LAZY)  // 지연 로딩 설정
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     // 일정 제목
     @Column(nullable = false, length = 200)
@@ -31,8 +32,8 @@ public class Schedule extends  BaseEntity {
 
     // 생성자
     @Builder
-    public Schedule(String name, String title, String content) {
-        this.name = name;
+    public Schedule(User user, String title, String content) {
+        this.user = user;
         this.title = title;
         this.content = content;
     }
@@ -45,5 +46,15 @@ public class Schedule extends  BaseEntity {
         if (content != null) {
             this.content = content;
         }
+    }
+
+    // 작성자명 조회 편의 메서드
+    public String getUsername() {
+        return user.getUsername();
+    }
+
+    // 유저 ID 조회 편의 메서드
+    public Long getUserId() {
+        return user.getId();
     }
 }

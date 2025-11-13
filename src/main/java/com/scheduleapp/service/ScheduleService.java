@@ -26,7 +26,7 @@ public class ScheduleService {
     // 일정 생성
     @Transactional
     public ScheduleResponse createSchedule(ScheduleCreateRequest request) {
-        log.info("Creating schedule for user: {}", request.getUsername());
+        log.info("Creating schedule for user: {}", request.getName());
 
         // DTO를 Entity로 변환하여 저장
         Schedule schedule = request.toEntity();

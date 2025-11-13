@@ -19,7 +19,7 @@ public class Schedule extends  BaseEntity {
 
     // 작성자명
     @Column(nullable = false, length = 50)
-    private String username;
+    private String name;
 
     // 일정 제목
     @Column(nullable = false, length = 200)
@@ -31,8 +31,8 @@ public class Schedule extends  BaseEntity {
 
     // 생성자
     @Builder
-    public Schedule(String username, String title, String content) {
-        this.username = username;
+    public Schedule(String name, String title, String content) {
+        this.name = name;
         this.title = title;
         this.content = content;
     }

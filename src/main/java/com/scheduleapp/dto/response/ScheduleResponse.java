@@ -15,7 +15,8 @@ import java.time.LocalDateTime;
 public class ScheduleResponse {
 
     private Long id;
-    private String name;
+    private Long userId;
+    private String username;
     private String title;
     private String content;
     private LocalDateTime createdAt;
@@ -25,7 +26,8 @@ public class ScheduleResponse {
     public static ScheduleResponse from(Schedule schedule) {
         return ScheduleResponse.builder()
                 .id(schedule.getId())
-                .name(schedule.getName())
+                .userId(schedule.getUserId())
+                .username(schedule.getUsername())
                 .title(schedule.getTitle())
                 .content(schedule.getContent())
                 .createdAt(schedule.getCreatedAt())

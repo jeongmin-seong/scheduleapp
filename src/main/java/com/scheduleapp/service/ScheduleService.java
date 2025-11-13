@@ -4,6 +4,7 @@ import com.scheduleapp.dto.request.ScheduleCreateRequest;
 import com.scheduleapp.dto.request.ScheduleUpdateRequest;
 import com.scheduleapp.dto.response.ScheduleResponse;
 import com.scheduleapp.entity.Schedule;
+import com.scheduleapp.entity.User;
 import com.scheduleapp.exception.BusinessException;
 import com.scheduleapp.exception.ErrorCode;
 import com.scheduleapp.repository.ScheduleRepository;
@@ -22,14 +23,18 @@ import java.util.stream.Collectors;
 public class ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
+    private final UserService userService;
 
     // 일정 생성
     @Transactional
     public ScheduleResponse createSchedule(ScheduleCreateRequest request) {
-        log.info("Creating schedule for user: {}", request.getName());
+        log.info("Creating schedule for user: {}", request.getUserId());
+
+        // 유저 존재 확인
+        User user = userService.findUserById(request.getUserId());
 
         // DTO를 Entity로 변환하여 저장
-        Schedule schedule = request.toEntity();
+        Schedule schedule = request.toEntity(user);
         Schedule savedSchedule = scheduleRepository.save(schedule);
 
         log.info("Schedule created succesfully with id: {}", savedSchedule.getId());
@@ -38,11 +43,17 @@ public class ScheduleService {
 
     // 일정 단건 조회
     @Transactional
-    public ScheduleResponse getSchedule(Long id) {
-        log.info("Fetching schedule for user: {}", id);
+    public List<ScheduleResponse> getSchedulesByUserId(Long userId) {
+        log.info("Fetching schedule for user: {}", userId);
 
-        Schedule schedule = findScheduleById(id);
-        return ScheduleResponse.from(schedule);
+        // 유저 존재 확인
+        userService.findUserById(userId);
+
+        List<Schedule> schedules = scheduleRepository.findByUserIdOrderByUpdatedAtDesc(userId);
+
+        return schedules.stream()
+                .map(ScheduleResponse::from)
+                .collect(Collectors.toList());
     }
 
     // 일정 전체 조회(최신순)

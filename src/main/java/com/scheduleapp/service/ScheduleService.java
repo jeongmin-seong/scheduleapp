@@ -43,13 +43,13 @@ public class ScheduleService {
 
     // 일정 단건 조회
     @Transactional
-    public List<ScheduleResponse> getSchedulesByUserId(Long userId) {
-        log.info("Fetching schedule for user: {}", userId);
+    public List<ScheduleResponse> getSchedules(Long id) {
+        log.info("Fetching schedule for user: {}", id);
 
         // 유저 존재 확인
-        userService.findUserById(userId);
+        userService.findUserById(id);
 
-        List<Schedule> schedules = scheduleRepository.findByUser_IdOrderByUpdatedAtDesc(userId);
+        List<Schedule> schedules = scheduleRepository.findByUser_IdOrderByUpdatedAtDesc(id);
 
         return schedules.stream()
                 .map(ScheduleResponse::from)
@@ -104,15 +104,4 @@ public class ScheduleService {
                     return new BusinessException(ErrorCode.SCHEDULE_NOT_FOUND);
                 });
     }
-
-    // 단일 일정 조회 유지를 위한 메서드
-    public ScheduleResponse getSchedule(Long id) {
-        log.info("Fetching schedule with id: {}", id);
-
-        Schedule schedule = findScheduleById(id);
-
-        // 연관된 유저 데이터도 같이 담고 싶다면, DTO에서 처리
-        return ScheduleResponse.from(schedule);
-    }
-
 }

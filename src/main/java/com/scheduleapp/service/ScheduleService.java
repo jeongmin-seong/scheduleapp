@@ -43,7 +43,7 @@ public class ScheduleService {
 
     // 일정 단건 조회
     @Transactional
-    public List<ScheduleResponse> getSchedules(Long id) {
+    public List<ScheduleResponse> getSchedule(Long id) {
         log.info("Fetching schedule for user: {}", id);
 
         // 유저 존재 확인

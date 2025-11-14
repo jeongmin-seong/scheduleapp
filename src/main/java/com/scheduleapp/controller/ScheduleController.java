@@ -38,7 +38,7 @@ public class ScheduleController {
     public ResponseEntity<ScheduleResponse> getSchedule(@PathVariable Long id) {
         log.info("GET /api/schedules/{} - Fetching schedule", id);
 
-        ScheduleResponse response = scheduleService.getSchedule(id);
+        ScheduleResponse response = (ScheduleResponse) scheduleService.getSchedule(id);
 
         return ResponseEntity.ok(response);
     }

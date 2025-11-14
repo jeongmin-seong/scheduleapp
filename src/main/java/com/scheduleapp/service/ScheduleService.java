@@ -43,17 +43,12 @@ public class ScheduleService {
 
     // 일정 단건 조회
     @Transactional
-    public List<ScheduleResponse> getSchedule(Long id) {
-        log.info("Fetching schedule for user: {}", id);
+    public ScheduleResponse getSchedule(Long scheduleId) {
+        log.info("Fetching schedule with id: {}", scheduleId);
 
-        // 유저 존재 확인
-        userService.findUserById(id);
+        Schedule schedule = findScheduleById(scheduleId);
 
-        List<Schedule> schedules = scheduleRepository.findByUser_IdOrderByUpdatedAtDesc(id);
-
-        return schedules.stream()
-                .map(ScheduleResponse::from)
-                .collect(Collectors.toList());
+        return ScheduleResponse.from(schedule);
     }
 
     // 일정 전체 조회(최신순)

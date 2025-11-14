@@ -12,7 +12,7 @@ spring:
   # JPA 설정
   jpa:
     hibernate:
-      ddl-auto: update  # create: 테이블 재생성, update: 변경사항만 반영, none: 아무것도 안함
+      ddl-auto: create-drop # create: 테이블 재생성, update: 변경사항만 반영, none: 아무것도 안함
     properties:
       hibernate:
         format_sql: true

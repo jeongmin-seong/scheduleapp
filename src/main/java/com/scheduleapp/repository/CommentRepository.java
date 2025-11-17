@@ -12,15 +12,15 @@ import java.util.List;
 public interface CommentRepository extends JpaRepository<Comment, Long> {
 
     // 특정 일정의 모든 댓글 조회 (최신순)
-    List<Comment> findByScheduleIdOrderByCreatedAtDesc(Long scheduleId);
+    List<Comment> findBySchedule_IdOrderByCreatedAtDesc(Long scheduleId);
 
     // 특정 일정의 모든 댓글 조회 (User 정보 함께 조회)
     @Query("SELECT c FROM Comment c JOIN FETCH c.user WHERE c.schedule.id = :scheduleId ORDER BY c.createdAt DESC")
-    List<Comment> findByScheduleIdWithUser(@Param("scheduleId") Long scheduleId);
+    List<Comment> findBySchedule_IdWithUser(@Param("scheduleId") Long scheduleId);
 
     // 특정 유저의 모든 댓글 조회 (최신순)
-    List<Comment> findByUserIdOrderByCreatedAtDesc(Long userId);
+    List<Comment> findByUser_IdOrderByCreatedAtDesc(Long userId);
 
     // 특정 일정의 댓글 개수 조회
-    long countByScheduleId(Long scheduleId);
+    long countBySchedule_Id(Long scheduleId);
 }

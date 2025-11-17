@@ -64,15 +64,13 @@ public class CommentService {
         scheduleService.findScheduleById(scheduleId);
 
         // N+1 문제 해결: User 정보를 함께 조회
-        List<Comment> comments = commentRepository.findByScheduleIdWithUser(scheduleId);
+        List<Comment> comments = commentRepository.findBySchedule_IdWithUser(scheduleId);
 
         log.info("Found {} comments for schedule id: {}", comments.size(), scheduleId);
         return comments.stream()
                 .map(CommentResponse::from)
                 .collect(Collectors.toList());
     }
-
-
 
     // 특정 유저의 전체 댓글 조회 (최신순)
     public List<CommentResponse> getCommentsByUserId(Long userId) {
@@ -81,7 +79,7 @@ public class CommentService {
         // 유저 존재 확인
         userService.findUserById(userId);
 
-        List<Comment> comments = commentRepository.findByUserIdOrderByCreatedAtDesc(userId);
+        List<Comment> comments = commentRepository.findByUser_IdOrderByCreatedAtDesc(userId);
 
         log.info("Found {} comments for user id: {}", comments.size(), userId);
         return comments.stream()

@@ -91,8 +91,8 @@ public class ScheduleService {
         log.info("Schedule deleted successfully with id: {}", id);
     }
 
-    // ID로 일정을 조회하는 private 메서드 - 일정이 존재하지 않을 경우 예외 발생
-    private Schedule findScheduleById(Long id) {
+    // ID로 일정을 조회하는 public 메서드 - 일정이 존재하지 않을 경우 예외 발생
+    public Schedule findScheduleById(Long id) {
         return scheduleRepository.findById(id)
                 .orElseThrow(() -> {
                     log.error("Schedule not found with id: {}", id);

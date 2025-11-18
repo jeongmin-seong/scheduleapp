@@ -2,14 +2,18 @@ package com.scheduleapp.service;
 
 import com.scheduleapp.dto.request.ScheduleCreateRequest;
 import com.scheduleapp.dto.request.ScheduleUpdateRequest;
+import com.scheduleapp.dto.response.SchedulePageResponse;
 import com.scheduleapp.dto.response.ScheduleResponse;
 import com.scheduleapp.entity.Schedule;
 import com.scheduleapp.entity.User;
 import com.scheduleapp.exception.BusinessException;
 import com.scheduleapp.exception.ErrorCode;
+import com.scheduleapp.repository.CommentRepository;
 import com.scheduleapp.repository.ScheduleRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +27,7 @@ import java.util.stream.Collectors;
 public class ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
+    private final CommentRepository commentRepository;
     private final UserService userService;
 
     // 일정 생성
@@ -60,6 +65,44 @@ public class ScheduleService {
         return schedules.stream()
                 .map(ScheduleResponse::from)
                 .collect(Collectors.toList());
+    }
+
+    // 특정 유저의 일정 조회 (최신순)
+    public List<ScheduleResponse> getSchedulesByUserId(Long userId) {
+        log.info("Fetching schedules for user id: {}", userId);
+
+        // 유저 존재 확인
+        userService.findUserById(userId);
+
+        List<Schedule> schedules = scheduleRepository.findByUser_IdOrderByUpdatedAtDesc(userId);
+
+        return schedules.stream()
+                .map(ScheduleResponse::from)
+                .collect(Collectors.toList());
+    }
+
+    // 전체 일정 페이징 조회 (최신순)
+    public Page<SchedulePageResponse> getSchedulesWithPaging(Pageable pageable) {
+        log.info("Fetching schedules with paging - page: {}",
+                pageable.getPageNumber(),
+                pageable.getPageSize());
+
+        // 1. 페이징 처리된 일정 조회
+        Page<Schedule> schedulePage = scheduleRepository.findAllByOrderByUpdatedAtDesc(pageable);
+
+        // 2. 각 일정의 댓글 개수를 조회하고 DTO로 변환
+        Page<SchedulePageResponse> responsePage = schedulePage.map(schedule -> {
+            Long commentCount = commentRepository.countBySchedule_Id(schedule.getId());
+
+            return SchedulePageResponse.of(schedule, commentCount);
+        });
+
+        log.info("Found {} schedules in page {} of {}",
+                responsePage.getNumberOfElements(),  // 현재 페이지의 일정 개수
+                responsePage.getNumber() + 1,        // 현재 페이지 번호 (사용자 표시용: 1부터 시작)
+                responsePage.getTotalPages());       // 전체 페이지 수
+
+        return responsePage;
     }
 
     // 일정 수정

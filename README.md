@@ -79,7 +79,7 @@ src/main/java/com//scheduleapp/
 │       ├── CommentResponse.java
 │       └── SchedulePageResponse.java
 ├── entity/                     # 엔티티
-│   ├── BaseTimeEntity.java    # 날짜 추상 클래스
+│   ├── BaseEntity.java    # 날짜 추상 클래스
 │   ├── Schedule.java          # 일정 엔티티
 │   ├── User.java              # 유저 엔티티
 │   └── Comment.java           # 댓글 엔티티

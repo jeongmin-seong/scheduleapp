@@ -2,11 +2,15 @@ package com.scheduleapp.controller;
 
 import com.scheduleapp.dto.request.ScheduleCreateRequest;
 import com.scheduleapp.dto.request.ScheduleUpdateRequest;
+import com.scheduleapp.dto.response.SchedulePageResponse;
 import com.scheduleapp.dto.response.ScheduleResponse;
 import com.scheduleapp.service.ScheduleService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -52,6 +56,27 @@ public class ScheduleController {
 
         return ResponseEntity.ok(responses);
     }
+
+    // 전체 일정 페이징 조회 API
+    @GetMapping("/page")
+    public ResponseEntity<Page<SchedulePageResponse>> getSchedulesWithPaging(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        log.info("GET /api/schedules/page?page={}&size={} - Fetching schedules with paging", page, size);
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<SchedulePageResponse> responses = scheduleService.getSchedulesWithPaging(pageable);
+
+        log.info("Returning {} schedules (page {}/{})",
+                responses.getNumberOfElements(),     // 현재 페이지의 일정 개수
+                responses.getNumber() + 1,           // 현재 페이지 (1부터 표시)
+                responses.getTotalPages());          // 전체 페이지 수
+
+        return ResponseEntity.ok(responses);
+    }
+
 
     // 일정 수정 API
     @PutMapping("/{id}")
